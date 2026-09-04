@@ -7,16 +7,25 @@ spike is done and its findings are folded back into SPEC.md.
 
 ## Install
 
-Copy or symlink `BestieSpike/` into your WoW AddOns directory:
-
-    <WoW install>/_retail_/Interface/AddOns/BestieSpike/
-
 **Both testers need it installed**, and need to already be Battle.net friends with each other —
 this spike doesn't test befriending, only the addon-message-over-BattleTag mechanism itself.
 
-The `.toc` file's `## Interface` line is a placeholder and will likely need bumping to match your
-actual client. If the addon doesn't appear in the AddOns list, check "Load out of date AddOns"
-first, then confirm your real interface version in-game with:
+**For yourself (local testing):** run the build script from the repo root — it stamps a build
+version into a staged copy and installs it directly into your local AddOns folder:
+
+    .\scripts\build-addon.ps1 -AddonPath spike\BestieSpike
+
+**For your friend:** the same command also produces a versioned zip under `dist\` (e.g.
+`dist\BestieSpike-0.1.0+20260903.1421.zip`) — send that over Discord. They unzip it directly into
+their own `<WoW install>/_retail_/Interface/AddOns/` folder. See [../scripts/README.md](../scripts/README.md)
+for the script's other options.
+
+Each build prints its stamped version to chat on login (`Loaded version 0.1.0+...`), so when
+comparing notes you can both confirm you're testing the same build.
+
+The `.toc`'s `## Interface` line targets current Retail (`120100` as of writing). If the addon
+doesn't appear in the AddOns list after a client patch, check "Load out of date AddOns" first,
+then confirm your real interface version in-game with:
 
     /run print(select(4, GetBuildInfo()))
 

@@ -1,4 +1,4 @@
-## Interface: 110107
+## Interface: 120100
 ## Title: Bestie Spike
 ## Notes: Throwaway test addon proving out Bestie's technical unknowns (see ../../SPEC.md). Not meant to be kept or published.
 ## Version: 0.1.0
