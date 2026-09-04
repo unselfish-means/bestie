@@ -1,5 +1,17 @@
+local ADDON_NAME = ...
+
 local function Print(msg)
 	print("|cff33ff99[BestieSpike]|r " .. tostring(msg))
+end
+
+local function GetAddonVersion()
+	if C_AddOns and C_AddOns.GetAddOnMetadata then
+		return C_AddOns.GetAddOnMetadata(ADDON_NAME, "Version")
+	end
+	if type(GetAddOnMetadata) == "function" then
+		return GetAddOnMetadata(ADDON_NAME, "Version")
+	end
+	return "unknown"
 end
 
 local function DumpArgs(label, ...)
@@ -140,7 +152,7 @@ watcher:RegisterEvent("CHAT_MSG_BN_WHISPER")
 watcher:RegisterEvent("ACHIEVEMENT_EARNED")
 watcher:SetScript("OnEvent", function(_, event, ...)
 	if event == "PLAYER_LOGIN" then
-		Print("Loaded. Type /bspike for commands.")
+		Print("Loaded version " .. tostring(GetAddonVersion()) .. ". Type /bspike for commands.")
 		Print("Modern API (C_BattleNet.GetFriendAccountInfo): " .. tostring(HasModernFriendAPI()))
 		Print("Legacy API (BNGetFriendInfo): " .. tostring(type(BNGetFriendInfo) == "function"))
 	elseif event == "CHAT_MSG_BN_WHISPER" then
