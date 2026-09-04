@@ -46,14 +46,20 @@ end
 
 -- Normalizes across the modern (C_BattleNet) and legacy (BNGetFriendInfo) APIs so the rest
 -- of the spike doesn't need to know which one the current client actually has.
+--
+-- Modern API note (confirmed by live testing): the top-level accountInfo table has no isOnline
+-- field of its own -- online status only exists nested under gameAccountInfo.isOnline, which is
+-- only populated while that friend is actually in a WoW session. And `accountName` is a display
+-- name, not necessarily the literal BattleTag string -- match against `battleTag` instead.
 local function GetFriendInfo(index)
 	if HasModernFriendAPI() then
 		local ok, info = pcall(C_BattleNet.GetFriendAccountInfo, index)
 		if ok and info then
 			local game = info.gameAccountInfo
 			return {
-				accountName = info.accountName or info.battleTag,
-				isOnline = info.isOnline,
+				accountName = info.accountName,
+				battleTag = info.battleTag,
+				isOnline = (game ~= nil and game.isOnline) or false,
 				bnetAccountID = info.bnetAccountID,
 				characterName = game and game.characterName,
 				realmName = game and game.realmName,
@@ -65,7 +71,8 @@ local function GetFriendInfo(index)
 		local ok, battleTag, accountName, _, _, toonName, toonID, _, isOnline = pcall(BNGetFriendInfo, index)
 		if ok then
 			return {
-				accountName = accountName or battleTag,
+				accountName = accountName,
+				battleTag = battleTag,
 				isOnline = isOnline,
 				bnetAccountID = toonID,
 				characterName = toonName,
@@ -81,7 +88,7 @@ local function GetFriendInfoByTag(tag)
 	local total = GetNumBNetFriends() or 0
 	for i = 1, total do
 		local info = GetFriendInfo(i)
-		if info and info.accountName and info.accountName:lower() == tag:lower() then
+		if info and info.battleTag and info.battleTag:lower() == tag:lower() then
 			return info
 		end
 	end
@@ -99,8 +106,8 @@ local function ListFriends()
 				characterBit = (" | char=%s realm=%s faction=%s"):format(
 					tostring(info.characterName), tostring(info.realmName), tostring(info.factionName))
 			end
-			Print(("#%d %s online=%s bnetAccountID=%s%s"):format(
-				i, tostring(info.accountName), tostring(info.isOnline), tostring(info.bnetAccountID), characterBit))
+			Print(("#%d battleTag=%s name=%s online=%s%s"):format(
+				i, tostring(info.battleTag), tostring(info.accountName), tostring(info.isOnline), characterBit))
 		else
 			Print(("#%d -- failed to read friend info: %s"):format(i, tostring(err)))
 		end
@@ -115,7 +122,7 @@ local function SendTestAchievement(tag, achievementID)
 	end
 	local info = GetFriendInfoByTag(tag)
 	if not info then
-		Print("No BNet friend found matching '" .. tag .. "'. Run /bspike friends first.")
+		Print("No BNet friend found matching '" .. tag .. "'. Run /bspike friends and use the battleTag= value shown there.")
 		return
 	end
 	if not info.isOnline then
@@ -185,7 +192,8 @@ SlashCmdList.BESTIESPIKE = function(msg)
 			Print("Usage: /bspike online <BattleTag>")
 		else
 			local info = GetFriendInfoByTag(tag)
-			Print(info and (tag .. " isOnline=" .. tostring(info.isOnline)) or ("No BNet friend found matching '" .. tag .. "'."))
+			Print(info and (tag .. " isOnline=" .. tostring(info.isOnline))
+				or ("No BNet friend found matching '" .. tag .. "'. Use the battleTag= value from /bspike friends."))
 		end
 	elseif cmd == "send" then
 		SendTestAchievement(args[1], args[2])
@@ -195,7 +203,7 @@ SlashCmdList.BESTIESPIKE = function(msg)
 		BestieSpikeDB.log = {}
 		Print("Log cleared.")
 	else
-		Print("Commands:")
+		Print("Commands (BattleTag = the battleTag= value from /bspike friends, e.g. Name#1234):")
 		Print("  /bspike friends                          -- list BNet friends + presence info")
 		Print("  /bspike online <BattleTag>               -- check one friend's online status")
 		Print("  /bspike send <BattleTag> <achievementID> -- send a test achievement whisper")
