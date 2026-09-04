@@ -79,6 +79,11 @@ or faction either of them is playing — making it the natural channel for a fix
       `SavedVariables`, not per-character, and never in addon source.
 
 **Achievement notifications**
+- [ ] Notifications are only ever sent to a bestie with a completed (`Active`) handshake — never
+      based on a known BattleTag alone, and never to a `Pending` or `Removed` entry. This is
+      enforced deliberately, even though `BNSendWhisper` itself doesn't require any relationship
+      to exist between sender and recipient — it's a boundary against one person spamming or
+      pestering another through the addon, not a technical necessity.
 - [ ] Before sending, the addon checks whether the bestie's currently active character is in the
       same guild as the achiever's; if so, no notification is sent — Blizzard's native guild
       achievement announcement already covers that case.
