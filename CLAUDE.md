@@ -4,10 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project status
 
-Pre-implementation. No v1 addon code exists yet — what's in the repo so far is
-[SPEC.md](SPEC.md) (the product spec) and a throwaway `spike/BestieSpike/` addon built to prove
-out the spec's open technical unknowns before real development starts. Read SPEC.md first; it's
-the source of truth for product decisions, requirements, and what's still undecided.
+v1 is implemented in `Bestie/` — all P0 requirements from SPEC.md (besties list with
+handshake/mute/block, same-guild-aware notifications). Untested in-game and not yet packaged for
+CurseForge. `spike/BestieSpike/` is the throwaway addon that proved out the spec's technical
+unknowns before v1 development started; it's no longer load-bearing but is left in the repo for ad
+hoc testing. Read SPEC.md first; it's the source of truth for product decisions, requirements, and
+what's still undecided.
 
 ## Purpose
 
@@ -31,11 +33,30 @@ There's no build/lint/test tooling — WoW addons have no build step. To load an
 symlink or copy its folder into `_retail_/Interface/AddOns/`, then `/reload` in-game to pick up
 changes.
 
-- **`spike/BestieSpike/`** — throwaway addon proving out SPEC.md's technical unknowns (BattleTag
-  whisper delivery + achievement links). See [spike/README.md](spike/README.md) for install and
-  test steps. Requires two Battle.net-friended accounts to actually test. Not meant to be kept
-  once the spike concludes.
-- The real v1 addon doesn't exist yet. Once it does, update this file with: its folder layout,
-  the `.toc` file's `## Interface` version (must be bumped each WoW patch to avoid an "out of
-  date" warning), its `SavedVariables` schema (besties list + relationship state — see SPEC.md's
-  Requirements), and any vendored library dependencies and how they're updated.
+- **`Bestie/`** — the real v1 addon. Build/install locally with
+  `.\scripts\build-addon.ps1 -AddonPath Bestie` (see [scripts/README.md](scripts/README.md)).
+  Requires two Battle.net-friended accounts to test end-to-end, same as the spike.
+  - `.toc` `## Interface` is `120100` (current Retail as of writing) — bump it each WoW patch or
+    the addon shows an "out of date" warning.
+  - `SavedVariables: BestieDB` — account-wide, `{ besties = { [battleTagLower] = { battleTag,
+    status, muted, lastKnownGuild } }, blocked = { [battleTagLower] = true } }`. `status` is one of
+    `PendingOutgoing` / `PendingIncoming` / `Active` / `Removed` (a soft tombstone, not a deleted
+    entry — see SPEC.md's handshake-abuse-boundary requirement). Blocking is tracked separately
+    from relationship status so it survives independent of any existing entry.
+  - No vendored libraries — five plain Lua files, no build step, no third-party deps.
+  - File layout: `Bestie.lua` (namespace bootstrap, SavedVariables init, BNet friend lookups),
+    `Protocol.lua` (the BNSendWhisper-based handshake/guild-sync wire format — internal traffic is
+    marked with a control-character prefix and filtered out of chat via
+    `ChatFrame_AddMessageEventFilter`, while un-marked whispers, i.e. achievement notifications,
+    pass through untouched), `Besties.lua` (relationship state machine + protocol handlers),
+    `Notify.lua` (`ACHIEVEMENT_EARNED` handling + the guild-sync broadcast that implements
+    SPEC.md's same-guild detection), `Popups.lua` (the incoming-request StaticPopup), `Slash.lua`
+    (`/bestie add|remove|mute|unmute|block|unblock|list`).
+  - `.github/workflows/release.yml` packages and uploads to CurseForge via the BigWigsMods
+    packager action on every tag push. Needs a `CF_API_TOKEN` repo secret and a
+    `## X-Curse-Project-ID:` line in `Bestie.toc` (both TODO — see the comment in that file) once a
+    CurseForge project exists; creating that project/token is a manual step outside this repo.
+- **`spike/BestieSpike/`** — throwaway addon that proved out SPEC.md's technical unknowns (BattleTag
+  whisper delivery + achievement links) before `Bestie/` was built. See
+  [spike/README.md](spike/README.md). No longer load-bearing; kept around for ad hoc testing and
+  can be deleted whenever it's not wanted.
