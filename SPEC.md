@@ -116,36 +116,33 @@ or faction either of them is playing — making it the natural channel for a fix
   intercepting/suppressing the raw chat line, which v1 deliberately avoids needing.
 - "Send grats back" one-click reply from the notification.
 
-## Technical Spike (do this before building anything else)
+## Technical Spike — Resolved
 
-Everything above rests on a few unproven mechanisms around sending and receiving Battle.net
-whispers with embedded achievement links. If these don't work as expected, the delivery model
-needs to be rethought — so they should be proven in isolation first, time-boxed rather than
-discovered mid-build.
+All four unknowns below were confirmed working end-to-end between two real, Battle.net-friended
+accounts, using the throwaway `spike/BestieSpike/` addon (see [spike/README.md](spike/README.md)).
+**Exit criteria met — no rework needed to the delivery model.** The spike addon is left in the
+repo for now in case further ad hoc testing is useful during v1 development; it's not load-bearing
+for anything and can be deleted whenever it's no longer wanted.
 
-**What to test**, using two Battle.net-friended accounts (one per player):
+**What was tested, and what was found:**
 
-1. **Resolve a BattleTag to a sendable target.** Confirm the friends-list API still exposes what's
-   needed to call `BNSendWhisper` against a specific BattleTag (presence ID lookup via the
-   Battle.net friends list).
-2. **Send + receive a whisper containing an achievement link.** Confirm `GetAchievementLink()`
-   output embeds correctly in a `BNSendWhisper` call, arrives via `CHAT_MSG_BN_WHISPER` on the
-   other account, and renders as a clickable link in the recipient's chat frame that opens the
-   achievement's details — same as clicking a link in a native guild announcement.
-3. **Presence check before sending.** Confirm there's a reliable way to check whether a given
-   BattleTag friend is currently online *before* sending — needed for both the "tell me they're
-   offline" invite behavior and deciding whether to attempt an achievement notification at all.
-4. **Payload size.** Confirm the realistic worst case (long player name + long achievement name,
-   as an achievement link) fits comfortably under whatever length limit `BNSendWhisper` enforces.
+1. **Resolve a BattleTag to a sendable target — confirmed.** `C_BattleNet.GetFriendAccountInfo(i)`
+   is the correct modern API. One gotcha: its `accountName` field is a display name, not
+   necessarily the literal BattleTag string — match against the separate `battleTag` field instead.
+2. **Send + receive a whisper containing an achievement link — confirmed.** `GetAchievementLink()`
+   output embeds correctly in `BNSendWhisper`, arrives via `CHAT_MSG_BN_WHISPER`, and renders as a
+   clickable, functional achievement link on the receiving end (verified visually on both
+   accounts) — same as a native guild announcement, not raw markup text.
+3. **Presence check before sending — confirmed**, with a gotcha: online status is *not* a
+   top-level field on the friend-info table — it's nested at `gameAccountInfo.isOnline`, and only
+   reflects being online *in WoW specifically* (not Battle.net-online-in-general, e.g.
+   mobile-app-only). Verified correct against both an online and an offline friend.
+4. **Payload size — confirmed** via successful real sends; no truncation observed. Not stress-tested
+   against a pathologically long achievement name, but not a concern worth blocking on.
 
-Note: intercepting/suppressing the chat line is *not* part of this spike — v1 needs no receive-side
-interception, since the whisper itself (formatted plainly, with a link) is the notification. That
-becomes relevant only if the P2 custom-popup idea gets built later.
-
-**Exit criteria:** all four confirmed working end-to-end between two real accounts, or a clear
-answer on which one breaks and what the fallback/rework looks like. This should be small enough
-to finish in a throwaway test addon before any of the real besties-list or notification code is
-written.
+Note: intercepting/suppressing the chat line was *not* part of this spike — v1 needs no
+receive-side interception, since the whisper itself (formatted plainly, with a link) is the
+notification. That becomes relevant only if the P2 custom-popup idea gets built later.
 
 ## Open Design Decisions
 
@@ -178,8 +175,7 @@ revisit the achievement-filtering non-goal above.
 
 ## Phasing
 
-1. **Spike** — prove the whisper send/receive mechanism, including the achievement link (see
-   above).
+1. ~~**Spike** — prove the whisper send/receive mechanism, including the achievement link.~~ Done.
 2. **v1** — all P0 requirements: besties list with handshake/mute/block, same-guild-aware
    notifications, and CurseForge distribution.
 3. **v1.1** — P1: sound toggle, Battle.net Friends UI integration, minimap icon, options panel.
