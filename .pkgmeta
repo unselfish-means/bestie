@@ -9,6 +9,7 @@ move-folders:
   Bestie/Bestie: Bestie
 
 ignore:
+  - media
   - spike
   - scripts
   - CLAUDE.md
