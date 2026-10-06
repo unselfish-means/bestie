@@ -1,7 +1,7 @@
 ## Interface: 120100
 ## Title: Bestie
 ## Notes: Whispers your achievements to your Battle.net besties, wherever they are.
-## Version: 0.1.0
+## Version: 1.0.0
 ## SavedVariables: BestieDB
 # TODO: add "## X-Curse-Project-ID: <id>" here once the CurseForge project exists. Until then the
 # Package and release workflow (.github/workflows/release.yml) fails on purpose.
