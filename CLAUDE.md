@@ -66,11 +66,16 @@ changes.
     runbook in `wow-addons-skill`; don't edit it here). On every pushed tag it packages with the
     BigWigs packager, following the root [.pkgmeta](.pkgmeta), and uploads to CurseForge. A tag
     containing `alpha`/`beta` uploads as that type. It needs the `CURSEFORGE_API_TOKEN` repository
-    **Actions** secret and a `## X-Curse-Project-ID:` line in `Bestie.toc`. The ID is still TODO,
-    so the workflow fails on purpose until the CurseForge project exists.
-  - To release, push an annotated tag named for the `.toc` version:
-    `git tag -m "Bestie <ver>" <ver>` then `git push origin refs/tags/<ver>`. A lightweight tag,
-    or one created by `gh release create`, may not start the workflow.
+    **Actions** secret and the CurseForge project ID, `## X-Curse-Project-ID: 1730974` in
+    `Bestie.toc`.
+  - To release, bump `## Version` in a PR, then push an annotated tag named for that version:
+    `git tag -m "Bestie <ver>" <ver> origin/main` then `git push origin refs/tags/<ver>`. A
+    lightweight tag, or one created by `gh release create`, may not start the workflow. The owner
+    reviews the release notes before any tag is pushed; check the run with
+    `gh run list --workflow release.yml` and the file on CurseForge afterwards.
+  - 1.0.0 was uploaded to CurseForge by hand to create the project, and has no git tag, so the first
+    tagged release's changelog lists every commit since the repo began. Replace it on CurseForge with
+    the release notes.
 - **`spike/BestieSpike/`** — throwaway addon that proved out SPEC.md's technical unknowns (BattleTag
   whisper delivery + achievement links) before `Bestie/` was built. See
   [spike/README.md](spike/README.md). No longer load-bearing; kept around for ad hoc testing and
