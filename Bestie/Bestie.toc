@@ -3,8 +3,8 @@
 ## Notes: Whispers your achievements to your Battle.net besties, wherever they are.
 ## Version: 0.1.0
 ## SavedVariables: BestieDB
-# TODO: add "## X-Curse-Project-ID: <id>" here once a CurseForge project exists for this addon
-# (see .github/workflows/release.yml — CF_API_TOKEN repo secret also needs to be set).
+# TODO: add "## X-Curse-Project-ID: <id>" here once the CurseForge project exists. Until then the
+# Package and release workflow (.github/workflows/release.yml) fails on purpose.
 
 Bestie.lua
 Protocol.lua
