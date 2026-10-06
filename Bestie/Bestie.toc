@@ -2,9 +2,8 @@
 ## Title: Bestie
 ## Notes: Whispers your achievements to your Battle.net besties, wherever they are.
 ## Version: 1.0.0
+## X-Curse-Project-ID: 1730974
 ## SavedVariables: BestieDB
-# TODO: add "## X-Curse-Project-ID: <id>" here once the CurseForge project exists. Until then the
-# Package and release workflow (.github/workflows/release.yml) fails on purpose.
 
 Bestie.lua
 Protocol.lua
