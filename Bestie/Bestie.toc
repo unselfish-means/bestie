@@ -1,0 +1,14 @@
+## Interface: 120100
+## Title: Bestie
+## Notes: Whispers your achievements to your Battle.net besties, wherever they are.
+## Version: 0.1.0
+## SavedVariables: BestieDB
+# TODO: add "## X-Curse-Project-ID: <id>" here once a CurseForge project exists for this addon
+# (see .github/workflows/release.yml — CF_API_TOKEN repo secret also needs to be set).
+
+Bestie.lua
+Protocol.lua
+Besties.lua
+Notify.lua
+Popups.lua
+Slash.lua

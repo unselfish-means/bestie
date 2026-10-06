@@ -1,6 +1,6 @@
 # Bestie — Spec
 
-Status: Draft, pre-implementation
+Status: v1 implemented (`Bestie/`), untested in-game — needs the same two-account manual testing the spike used before CurseForge distribution
 Scope: v1 (see Non-Goals for what's deliberately excluded)
 
 ## Problem Statement
@@ -151,11 +151,13 @@ Direction is known; specifics aren't locked yet.
 - **Payload format.** Mirror Blizzard's own guild achievement phrasing as closely as possible —
   `{Player} earned {Achievement Link}` — using `GetAchievementLink()` for the achievement portion.
   No addon branding/prefix unless the spike surfaces a concrete reason one's needed.
-- **Same-guild detection mechanism.** Exactly how the sender determines whether the bestie's
-  *currently active character* is in the sender's guild before deciding whether to send. Candidate
-  approaches: comparing guild roster membership against a known bestie identity, or exchanging
-  current-guild info as part of the relationship state. Needs investigation — no API has been
-  confirmed for this yet.
+- **Same-guild detection mechanism — resolved.** No API exists to query another player's current
+  guild directly, so each side tells the other its current guild name as part of the relationship
+  protocol: on request/accept (piggybacked on the handshake), and again whenever it changes
+  (`PLAYER_GUILD_UPDATE`) or at login. The achiever compares the bestie's last-known-reported guild
+  name against their own before sending. This is best-effort, same as achievement delivery itself —
+  if a bestie is offline when a guild-sync fires, they simply learn the update next time both are
+  online together (see the no-offline-queueing Non-Goal above).
 - **Options panel layout.** Deferred until P1 work starts.
 
 ## Open Questions
@@ -177,5 +179,6 @@ revisit the achievement-filtering non-goal above.
 
 1. ~~**Spike** — prove the whisper send/receive mechanism, including the achievement link.~~ Done.
 2. **v1** — all P0 requirements: besties list with handshake/mute/block, same-guild-aware
-   notifications, and CurseForge distribution.
+   notifications, and CurseForge distribution. Code complete in `Bestie/`; CurseForge packaging and
+   real two-account testing still outstanding.
 3. **v1.1** — P1: sound toggle, Battle.net Friends UI integration, minimap icon, options panel.
