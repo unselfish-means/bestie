@@ -6,6 +6,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 CurseForge. Keep development notes out of it. Building, installing, and the in-game test plan are in
 [TESTING.md](TESTING.md); product decisions are in [SPEC.md](SPEC.md).
 
+## GitHub account
+
+The GitHub account and commit setup are in `CLAUDE.local.md` at the repo root (in a worktree, look in
+the main checkout's root). It isn't committed. Read it before any commit, push, or `gh` command.
+
 ## Project status
 
 v1 is implemented in `Bestie/` — all P0 requirements from SPEC.md (besties list with
