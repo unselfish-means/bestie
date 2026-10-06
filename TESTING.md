@@ -1,7 +1,7 @@
-# Bestie
+# Testing Bestie
 
-Broadcasts your achievements to your Battle.net besties via whisper, regardless of which guild
-either of you is in. See [../SPEC.md](../SPEC.md) for the full spec.
+How to build, install, and test Bestie in game before it goes to CurseForge. [README.md](README.md) is
+the player-facing description, and [SPEC.md](SPEC.md) is the full spec.
 
 ## Install
 

@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+[README.md](README.md) is the player-facing description, and it's also the description to paste into
+CurseForge. Keep development notes out of it. Building, installing, and the in-game test plan are in
+[TESTING.md](TESTING.md); product decisions are in [SPEC.md](SPEC.md).
+
 ## Project status
 
 v1 is implemented in `Bestie/` — all P0 requirements from SPEC.md (besties list with
@@ -35,7 +39,8 @@ changes.
 
 - **`Bestie/`** — the real v1 addon. Build/install locally with
   `.\scripts\build-addon.ps1 -AddonPath Bestie` (see [scripts/README.md](scripts/README.md)).
-  Requires two Battle.net-friended accounts to test end-to-end, same as the spike.
+  Requires two Battle.net-friended accounts to test end-to-end, same as the spike; the steps are in
+  [TESTING.md](TESTING.md).
   - `.toc` `## Interface` is `120100` (current Retail as of writing) — bump it each WoW patch or
     the addon shows an "out of date" warning.
   - `SavedVariables: BestieDB` — account-wide, `{ besties = { [battleTagLower] = { battleTag,
