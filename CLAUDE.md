@@ -68,6 +68,11 @@ changes.
     containing `alpha`/`beta` uploads as that type. It needs the `CURSEFORGE_API_TOKEN` repository
     **Actions** secret and the CurseForge project ID, `## X-Curse-Project-ID: 1730974` in
     `Bestie.toc`.
+  - **Bestie is in beta.** Until the owner says it's out of beta, every version and tag must contain
+    `beta`, for example `1.0.1-beta1`, `1.0.1-beta2`, `1.1.0-beta1`. The packager picks the
+    CurseForge release type only from the tag name: a tag with `beta` uploads as **Beta**, and one
+    without it, such as `1.0.1`, uploads as a full **Release** to everyone. Check the name before
+    pushing; a pushed tag can't be cleanly taken back.
   - To release, bump `## Version` in a PR, then push an annotated tag named for that version:
     `git tag -m "Bestie <ver>" <ver> origin/main` then `git push origin refs/tags/<ver>`. A
     lightweight tag, or one created by `gh release create`, may not start the workflow. The owner
