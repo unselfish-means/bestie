@@ -1,0 +1,17 @@
+# Packaging rules for the BigWigs packager (.github/workflows/release.yml), which
+# runs on every pushed tag and uploads the result to CurseForge.
+# The addon lives in a subfolder, so move it up to be the package root. Everything
+# else at the top level is ignored; dotfiles and git-ignored files (dist/) are
+# ignored automatically.
+package-as: Bestie
+
+move-folders:
+  Bestie/Bestie: Bestie
+
+ignore:
+  - spike
+  - scripts
+  - CLAUDE.md
+  - README.md
+  - SPEC.md
+  - TESTING.md

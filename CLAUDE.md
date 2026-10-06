@@ -62,10 +62,15 @@ changes.
     `Notify.lua` (`ACHIEVEMENT_EARNED` handling + the guild-sync broadcast that implements
     SPEC.md's same-guild detection), `Popups.lua` (the incoming-request StaticPopup), `Slash.lua`
     (`/bestie add|remove|mute|unmute|block|unblock|list`).
-  - `.github/workflows/release.yml` packages and uploads to CurseForge via the BigWigsMods
-    packager action on every tag push. Needs a `CF_API_TOKEN` repo secret and a
-    `## X-Curse-Project-ID:` line in `Bestie.toc` (both TODO — see the comment in that file) once a
-    CurseForge project exists; creating that project/token is a manual step outside this repo.
+  - `.github/workflows/release.yml` is the shared WIKR workflow (the `curseforge-packaging`
+    runbook in `wow-addons-skill`; don't edit it here). On every pushed tag it packages with the
+    BigWigs packager, following the root [.pkgmeta](.pkgmeta), and uploads to CurseForge. A tag
+    containing `alpha`/`beta` uploads as that type. It needs the `CURSEFORGE_API_TOKEN` repository
+    **Actions** secret and a `## X-Curse-Project-ID:` line in `Bestie.toc`. The ID is still TODO,
+    so the workflow fails on purpose until the CurseForge project exists.
+  - To release, push an annotated tag named for the `.toc` version:
+    `git tag -m "Bestie <ver>" <ver>` then `git push origin refs/tags/<ver>`. A lightweight tag,
+    or one created by `gh release create`, may not start the workflow.
 - **`spike/BestieSpike/`** — throwaway addon that proved out SPEC.md's technical unknowns (BattleTag
   whisper delivery + achievement links) before `Bestie/` was built. See
   [spike/README.md](spike/README.md). No longer load-bearing; kept around for ad hoc testing and
