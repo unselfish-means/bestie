@@ -75,3 +75,5 @@ changes.
   whisper delivery + achievement links) before `Bestie/` was built. See
   [spike/README.md](spike/README.md). No longer load-bearing; kept around for ad hoc testing and
   can be deleted whenever it's not wanted.
+- **`media/icon.png`** — the CurseForge project icon (1254×1254). It doesn't ship; `.pkgmeta`
+  ignores `media`.
