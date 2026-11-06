@@ -6,16 +6,18 @@ Builds a versioned copy of a WoW addon for local testing — no CurseForge invol
 later, separate step once an addon here has actually been tested and is in use). Takes the
 `## Version:` already in the addon's `.toc`, appends a build timestamp
 (`<version>+<yyyyMMdd.HHmm>`), and stamps that into a staged copy so both the local install and
-the zip are unambiguously versioned and always match each other.
+the zip are unambiguously versioned and always match each other. Builds are named `<AddonName>-Test`
+(folder, `.toc`, and title), so they can sit beside a CurseForge install of the release. Enable one at
+a time in the game's AddOns list; saved variables are named after the folder, so their data is separate.
 
 ```powershell
 .\scripts\build-addon.ps1 -AddonPath spike\BestieSpike
 ```
 
 By default this:
-1. Copies the addon into `F:\Blizzard\World of Warcraft\_retail_\Interface\AddOns\<AddonName>`
+1. Copies the addon into `F:\Blizzard\World of Warcraft\_retail_\Interface\AddOns\<AddonName>-Test`
    for your own local testing (overwriting whatever was there before).
-2. Zips the same build into `dist\<AddonName>-<version>.zip` for you to send to whoever else is
+2. Zips the same build into `dist\<AddonName>-Test-<version>.zip` for you to send to whoever else is
    testing (e.g., over Discord) — they just unzip it into their own AddOns folder.
 
 Options:

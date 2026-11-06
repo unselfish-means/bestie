@@ -16,7 +16,7 @@ version into a staged copy and installs it directly into your local AddOns folde
     .\scripts\build-addon.ps1 -AddonPath spike\BestieSpike
 
 **For your friend:** the same command also produces a versioned zip under `dist\` (e.g.
-`dist\BestieSpike-0.1.1+20260903.1421.zip`) — send that over Discord. They unzip it directly into
+`dist\BestieSpike-Test-0.1.1+20260903.1421.zip`) — send that over Discord. They unzip it directly into
 their own `<WoW install>/_retail_/Interface/AddOns/` folder. See [../scripts/README.md](../scripts/README.md)
 for the script's other options.
 
