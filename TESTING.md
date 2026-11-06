@@ -6,14 +6,15 @@ the player-facing description, and [SPEC.md](SPEC.md) is the full spec.
 ## Install
 
 **You (local testing):** run the build script from the repo root — it stamps a build version into
-a staged copy, installs it into your local AddOns folder, and produces a zip:
+a staged copy, installs it into your local AddOns folder as `Bestie-Test`, and produces a zip. If
+the CurseForge release is installed too, disable it in the game's AddOns list while testing:
 
     .\scripts\build-addon.ps1 -AddonPath Bestie
 
-**Your bestie:** send them the zip from `dist\` (e.g. `dist\Bestie-0.1.0+<timestamp>.zip`) over
+**Your bestie:** send them the zip from `dist\` (e.g. `dist\Bestie-Test-0.1.0+<timestamp>.zip`) over
 Discord. They unzip it directly into their own `<WoW install>/_retail_/Interface/AddOns/` folder —
-the zip already contains a `Bestie` folder, so they should end up with
-`Interface/AddOns/Bestie/Bestie.toc`, not a nested `Bestie/Bestie/...`.
+the zip already contains a `Bestie-Test` folder, so they should end up with
+`Interface/AddOns/Bestie-Test/Bestie-Test.toc`, not a nested `Bestie-Test/Bestie-Test/...`.
 
 You both need to already be Battle.net friends with each other for any of this to work — Bestie
 rides on top of that, it doesn't manage BNet friendships itself.

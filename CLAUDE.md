@@ -38,9 +38,10 @@ addon exists to test.
 
 ## Working in this repo
 
-There's no build/lint/test tooling — WoW addons have no build step. To load an addon in-game,
-symlink or copy its folder into `_retail_/Interface/AddOns/`, then `/reload` in-game to pick up
-changes.
+There's no lint/test tooling. To load an addon in-game, push a test build with
+`scripts/build-addon.ps1`, which installs it into `_retail_/Interface/AddOns/` as `<Addon>-Test`
+(folder, `.toc`, and title), then `/reload` in-game. Never link or copy it under the plain addon name:
+that's the CurseForge install's folder. Enable one at a time in the game's AddOns list.
 
 - **`Bestie/`** — the real v1 addon. Build/install locally with
   `.\scripts\build-addon.ps1 -AddonPath Bestie` (see [scripts/README.md](scripts/README.md)).
